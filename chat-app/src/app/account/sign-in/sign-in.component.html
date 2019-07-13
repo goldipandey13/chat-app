@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="row">
+        <div *ngIf="!loggedIn else successMsgDisplay" class="col-6 mx-auto mt-3 bg-info p-5">
+            <h3 class="pb-3 text-center">Login here</h3>
+            <form #signinFrom="ngForm" (ngSubmit)="signIn(signinFrom.valid)">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input [(ngModel)]="user.email" name="email" required type="email" id="email" class="form-control"
+                        placeholder="Enter email" #email="ngModel">
+                    <small *ngIf="(email.dirty || signinFrom.submitted) && email.invalid"
+                        class="form-text text-danger">Email
+                        is
+                        required.</small>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input [(ngModel)]="user.password" name="password" type="password" required id="password"
+                        class="form-control" placeholder="Password" #password="ngModel">
+                    <small *ngIf="(password.dirty || signinFrom.submitted) && password.invalid"
+                        class="form-text text-danger">Password is
+                        required</small>
+                </div>
+                <div class="pt-4">
+                    <button [disabled]="signinFrom.invalid" type="submit" class="btn btn-primary w-25">Submit</button>
+                    <app-toast-message *ngIf="showToast" [message]="toastMessage"></app-toast-message>
+                </div>
+            </form>
+        </div>
+
+        <ng-template #successMsgDisplay>
+            <div class="col-6 mx-auto mt-3 bg-info p-5">
+                <h3 class="text-center">You have successfully logged in.</h3>
+                <div class="text-center"> Redirecting to chat page...</div>
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="container">
+  <div class="row outer-container">
+    <div class="{{users.length === 0 ?' d-flex justify-content-center': ''}} col-4 bg-info mr-5 p-4 ">
+      <ng-container *ngIf="users.length > 0; else noUser">
+        <h4 class="text-center">User available for chat</h4>
+        <ng-container>
+          <p *ngFor="let user of users"
+            class="p-3 bg-light rounded m-2 cursor-pointer {{(selectedMember.email === user.email) ? 'active': ''}}"
+            (click)="startChat(user)">
+            {{ user.name }} <span *ngIf="user.live" class="blink-status d-inline-block m-2 float-right"></span> </p>
+        </ng-container>
+      </ng-container>
+      <ng-template #noUser>
+        <h3 class="align-self-center">No user available to chat</h3>
+      </ng-template>
+    </div>
+    <div class="{{!(!noMember && users.length > 0) ? 'd-flex': ''}} col-7 ml-5 bg-info p-4">
+      <div *ngIf="!noMember && users.length > 0 else noMemberForChat" class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-comment align-middle"></span>
+          <span class="ml-2 mb-1"> {{ selectedMember.name }} </span>
+        </div>
+        <div #scrollMe class="panel-body">
+          <ul class="chat">
+            <li *ngFor="let c of chats">
+              <div class="right clearfix" *ngIf="c.name===msgData.name; else leftChat">
+                <span class="chat-img pull-right">
+                  <img src="http://placehold.it/50/FA6F57/fff&text=U" alt="User Avatar" class="img-circle" />
+                </span>
+                <div class="chat-body clearfix">
+                  <div class="header">
+                    <small class=" text-muted"><span
+                        class="glyphicon glyphicon-time"></span>{{ c.updated_at | date: 'medium' }}</small>
+                    <strong class="pull-right primary-font">{{ c.name }}</strong>
+                  </div>
+                  <p>{{ c.message }}</p>
+                </div>
+              </div>
+              <ng-template #leftChat>
+                <div class="left clearfix">
+                  <span class="chat-img pull-left">
+                    <img src="http://placehold.it/50/55C1E7/fff&text=ME" alt="User Avatar" class="img-circle" />
+                  </span>
+                  <div class="chat-body clearfix">
+                    <div class="header">
+                      <strong class="primary-font">{{ c.name }}</strong> <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span>{{ c.updated_at | date: 'medium' }}</small>
+                    </div>
+                    <p class="float-right">{{ c.message }}</p>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+        <div class="panel-footer">
+          <form (ngSubmit)="sendMessage()" #msgForm="ngForm">
+            <div class="input-group">
+              <input type="hidden" [(ngModel)]="msgData.group" name="group" />
+              <input type="hidden" [(ngModel)]="msgData.name" name="name" />
+              <input id="btn-input" type="text" [(ngModel)]="msgData.message" name="message"
+                class="form-control input-sm" placeholder="Type your message here..." required="" />
+              <span class="input-group-btn">
+                <button [disabled]="savingMessage" class="btn btn-warning btn-sm" id="btn-chat"
+                  [disabled]="!msgForm.form.valid">
+                  Send</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+      <ng-template #noMemberForChat>
+        <div class="align-self-center mx-auto">
+          <h3>
+            No members have joined the plateform.
+          </h3>
+          <p class="text-center"> Please let people join to start chatting.</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

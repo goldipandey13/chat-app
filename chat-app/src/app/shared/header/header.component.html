@@ -1,0 +1,28 @@
+<header class="navbar navbar-light bg-white navbar-expand-lg py-1 px-md-4 border-bottom shadow-sm">
+  <a (click)="navigateToChatList()" class="navbar-brand text-info cursor-pointer">CHAT-APP</a>
+  <span class="navbar-text m-0 ml-auto">
+
+    <ng-container *ngIf="isLoggedIn else notLoggedIn">
+      <span class="mr-2">Hi, {{loggedInUser}}</span>
+      <i (click)="openDialog(logoutConfirmation)"
+        class="material-icons align-middle ml-2 cursor-pointer">power_settings_new</i>
+    </ng-container>
+    <ng-template #notLoggedIn>
+      <button [routerLink]="['/']" class="btn btn-outline-info my-2 my-sm-0 cursor-pointer" type="button">Sign
+        In</button>
+      <button [routerLink]="['/sign-up']" class="btn btn-outline-info my-2 my-sm-0 cursor-pointer" type="button">Sign
+        Up</button>
+    </ng-template>
+  </span>
+</header>
+
+<ng-template #logoutConfirmation>
+  <div class="px-3 my-3 text-center">
+    <h3 class="mb-3">Confirmation</h3>
+    <p>Are you sure you want to logout?</p>
+    <button type="button" class="btn mt-3 mx-4" matDialogClose>Cancel</button>
+    <button type="button" class="btn btn-success mt-3" matDialogClose (click)="logout()">Yes</button>
+  </div>
+</ng-template>
+
+<app-toast-message *ngIf="showToast" [message]="toastMessage"></app-toast-message>

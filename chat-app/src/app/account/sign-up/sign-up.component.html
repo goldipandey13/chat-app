@@ -1,0 +1,60 @@
+<div class="container-fluid">
+  <div class="row">
+    <div *ngIf="!registered else successMsgDisplay" class="col-6 mx-auto mt-3 bg-info p-5">
+      <h3 class="pb-3 text-center">Sign up here</h3>
+      <form #signupFrom="ngForm" (ngSubmit)="signUp(signupFrom.valid)">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input [(ngModel)]="user.name" name="name" type="text" id="name" class="form-control"
+            placeholder="Enter your name" #name="ngModel">
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input [(ngModel)]="user.email" name="email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            type="email" id="email" class="form-control" placeholder="Enter email" #email="ngModel">
+          <span *ngIf="(email.dirty || signupFrom.submitted) && email.invalid" class="form-text text-danger">
+            <small *ngIf="email.errors.required">Email is required.</small>
+            <small *ngIf="email.errors.pattern">Email is invalid.</small>
+          </span>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input [(ngModel)]="user.password" name="password" type="password" required id="password" class="form-control"
+            placeholder="Password" #password="ngModel">
+          <small *ngIf="(password.dirty || signupFrom.submitted) && password.invalid"
+            class="form-text text-danger">Password is
+            required</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Confirm password</label>
+          <input [(ngModel)]="confirmPassword" name="confirmPassword" required type="password" class="form-control"
+            placeholder="Password" #confirmPass="ngModel">
+          <span class="form-text text-danger">
+            <small *ngIf="(confirmPass.dirty || signupFrom.submitted) && confirmPass.invalid">Confirm password is
+              required</small><br>
+            <small *ngIf="(signupFrom.submitted && confirmPassword && user.password !== confirmPassword)">Password
+              and Confirm password
+              does
+              not match.</small>
+          </span>
+        </div>
+        <div (click)="iAgree()" class="form-group cursor-pointer">
+          <input [(ngModel)]="agreed" name="agreed" type="checkbox" class="form-check-input mr-4 cursor-pointer"
+            id="consent">
+          <label class=" form-check-label ml-5" for="consent"> I understand how my data will be used.</label>
+        </div>
+        <div class="pt-4">
+          <button [disabled]="!agreed" type="submit" class="btn btn-primary w-25">Submit</button>
+          <app-toast-message *ngIf="showToast" [message]="toastMessage"></app-toast-message>
+        </div>
+      </form>
+    </div>
+
+    <ng-template #successMsgDisplay>
+      <div class="col-6 mx-auto mt-3 bg-info p-5">
+        <h3 class="text-center">You have successfully registered.</h3>
+        <div class="text-center"> Redirecting to login page...</div>
+      </div>
+    </ng-template>
+  </div>
+</div>
